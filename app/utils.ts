@@ -248,6 +248,32 @@ export function getMessageImages(message: RequestMessage): string[] {
   return urls;
 }
 
+export function getMessageAudios(message: RequestMessage): string[] {
+  if (typeof message.content === "string") {
+    return [];
+  }
+  const urls: string[] = [];
+  for (const c of message.content) {
+    if (c.type === "audio_url") {
+      urls.push(c.audio_url?.url ?? "");
+    }
+  }
+  return urls;
+}
+
+export function getMessageVideos(message: RequestMessage): string[] {
+  if (typeof message.content === "string") {
+    return [];
+  }
+  const urls: string[] = [];
+  for (const c of message.content) {
+    if (c.type === "video_url") {
+      urls.push(c.video_url?.url ?? "");
+    }
+  }
+  return urls;
+}
+
 export function isVisionModel(model: string) {
   // Note: This is a better way using the TypeScript feature instead of `&&` or `||` (ts v5.5.0-dev.20240314 I've been using)
 

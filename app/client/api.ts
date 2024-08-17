@@ -23,9 +23,15 @@ export const Models = ["gpt-3.5-turbo", "gpt-4"] as const;
 export type ChatModel = ModelType;
 
 export interface MultimodalContent {
-  type: "text" | "image_url";
+  type: "text" | "image_url" | "audio_url" | "video_url";
   text?: string;
   image_url?: {
+    url: string;
+  };
+  audio_url?: {
+    url: string;
+  };
+  video_url?: {
     url: string;
   };
 }

@@ -63,7 +63,7 @@ import {
   getMessageTextContent,
   getMessageImages,
   isVisionModel,
-  isDalle3,
+  isDalle3, getMessageAudios, getMessageVideos,
 } from "../utils";
 
 import { uploadImage as uploadImageRemote } from "@/app/utils/chat";
@@ -1602,6 +1602,20 @@ function _Chat() {
                         className={styles["chat-message-item-image"]}
                         src={getMessageImages(message)[0]}
                         alt=""
+                      />
+                    )}
+                    {getMessageAudios(message).length == 1 && (
+                      <audio
+                        className={styles["chat-message-item-audio"]}
+                        autoplay
+                        src={getMessageAudios(message)[0]}
+                      />
+                    )}
+                    {getMessageVideos(message).length == 1 && (
+                      <video
+                        className={styles["chat-message-item-video"]}
+                        autoplay
+                        src={getMessageVideos(message)[0]}
                       />
                     )}
                     {getMessageImages(message).length > 1 && (
