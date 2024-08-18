@@ -225,7 +225,26 @@ export function isMacOS(): boolean {
 
 export function getMessageTextContent(message: RequestMessage) {
   if (typeof message.content === "string") {
-    return message.content;
+    var content = message.content;
+
+    while (true) {
+      var sMediaIndex = content.indexOf("[media]");
+      if (sMediaIndex < 0) {
+        break;
+      }
+
+      var eMediaIndex = content.indexOf("[/media]", sMediaIndex);
+      if (eMediaIndex < 0) {
+        content = content.substring(0, sMediaIndex);
+        break;
+      } else {
+        content =
+          content.substring(0, sMediaIndex) +
+          content.substring(eMediaIndex + 8);
+      }
+    }
+
+    return content;
   }
   for (const c of message.content) {
     if (c.type === "text") {
@@ -235,9 +254,35 @@ export function getMessageTextContent(message: RequestMessage) {
   return "";
 }
 
+function getMediaURLs(content: string, type: string) {
+  var urls: string[] = [];
+
+  var sMediaIndex = 0;
+  while (true) {
+    sMediaIndex = content.indexOf("[media]", sMediaIndex);
+    if (sMediaIndex < 0) {
+      break;
+    }
+
+    var eMediaIndex = content.indexOf("[/media]", sMediaIndex);
+    if (eMediaIndex < 0) {
+      break;
+    } else {
+      var url = content.substring(sMediaIndex + 7, eMediaIndex);
+      content = content.substring(eMediaIndex + 8);
+
+      if (url.startsWith(type + "=")) {
+        urls.push(content.substring(type.length + 1));
+      }
+    }
+  }
+
+  return urls;
+}
+
 export function getMessageImages(message: RequestMessage): string[] {
   if (typeof message.content === "string") {
-    return [];
+    return getMediaURLs(message.content, "image");
   }
   const urls: string[] = [];
   for (const c of message.content) {
@@ -250,7 +295,7 @@ export function getMessageImages(message: RequestMessage): string[] {
 
 export function getMessageAudios(message: RequestMessage): string[] {
   if (typeof message.content === "string") {
-    return [];
+    return getMediaURLs(message.content, "audio");
   }
   const urls: string[] = [];
   for (const c of message.content) {
@@ -263,7 +308,7 @@ export function getMessageAudios(message: RequestMessage): string[] {
 
 export function getMessageVideos(message: RequestMessage): string[] {
   if (typeof message.content === "string") {
-    return [];
+    return getMediaURLs(message.content, "video");
   }
   const urls: string[] = [];
   for (const c of message.content) {
