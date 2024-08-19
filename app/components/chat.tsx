@@ -1618,7 +1618,9 @@ function _Chat() {
                       <video
                         className={styles["chat-message-item-video"]}
                         autoPlay
+                        controls
                         src={getMessageVideos(message)[0]}
+                        width={"75%"}
                       />
                     )}
                     {getMessageImages(message).length > 1 && (

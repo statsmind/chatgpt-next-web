@@ -272,7 +272,7 @@ function getMediaURLs(content: string, type: string) {
       content = content.substring(eMediaIndex + 8);
 
       if (url.startsWith(type + "=")) {
-        urls.push(content.substring(type.length + 1));
+        urls.push(url.substring(type.length + 1));
       }
     }
   }
